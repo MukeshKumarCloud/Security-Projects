@@ -1,0 +1,583 @@
+
+       _               _
+   ___| |__   ___  ___| | _______   __
+  / __| '_ \ / _ \/ __| |/ / _ \ \ / /
+ | (__| | | |  __/ (__|   < (_) \ V /
+  \___|_| |_|\___|\___|_|\_\___/ \_/
+
+By Prisma Cloud | version: 3.2.521 
+
+terraform scan results:
+
+Passed checks: 12, Failed checks: 27, Skipped checks: 0
+
+Check: CKV_AWS_93: "Ensure S3 bucket policy does not lockout all but root user. (Prevent lockouts needing root account fixes)"
+	PASSED for resource: aws_s3_bucket.example
+	File: /main.tf:15-17
+	Guide: https://docs.prismacloud.io/en/enterprise-edition/policy-reference/aws-policies/s3-policies/bc-aws-s3-24
+Check: CKV_AWS_46: "Ensure no hard-coded secrets exist in EC2 user data"
+	PASSED for resource: aws_instance.web
+	File: /main.tf:47-65
+	Guide: https://docs.prismacloud.io/en/enterprise-edition/policy-reference/aws-policies/secrets-policies/bc-aws-secrets-1
+Check: CKV_AWS_88: "EC2 instance should not have public IP."
+	PASSED for resource: aws_instance.web
+	File: /main.tf:47-65
+	Guide: https://docs.prismacloud.io/en/enterprise-edition/policy-reference/aws-policies/public-policies/public-12
+Check: CKV_AWS_274: "Disallow IAM roles, users, and groups from using the AWS AdministratorAccess policy"
+	PASSED for resource: aws_iam_role.demo_role
+	File: /main.tf:84-98
+	Guide: https://docs.prismacloud.io/en/enterprise-edition/policy-reference/aws-policies/aws-iam-policies/bc-aws-274
+Check: CKV_AWS_61: "Ensure AWS IAM policy does not allow assume role permission across all services"
+	PASSED for resource: aws_iam_role.demo_role
+	File: /main.tf:84-98
+	Guide: https://docs.prismacloud.io/en/enterprise-edition/policy-reference/aws-policies/aws-iam-policies/bc-aws-iam-45
+Check: CKV_AWS_60: "Ensure IAM role allows only specific services or principals to assume it"
+	PASSED for resource: aws_iam_role.demo_role
+	File: /main.tf:84-98
+	Guide: https://docs.prismacloud.io/en/enterprise-edition/policy-reference/aws-policies/aws-iam-policies/bc-aws-iam-44
+Check: CKV_AWS_41: "Ensure no hard coded AWS access key and secret key exists in provider"
+	PASSED for resource: aws.default
+	File: /main.tf:10-12
+	Guide: https://docs.prismacloud.io/en/enterprise-edition/policy-reference/aws-policies/secrets-policies/bc-aws-secrets-5
+Check: CKV2_AWS_56: "Ensure AWS Managed IAMFullAccess IAM policy is not used."
+	PASSED for resource: aws_iam_role.demo_role
+	File: /main.tf:84-98
+	Guide: https://docs.prismacloud.io/en/enterprise-edition/policy-reference/aws-policies/aws-iam-policies/bc-aws-2-56
+Check: CKV_AWS_19: "Ensure all data stored in the S3 bucket is securely encrypted at rest"
+	PASSED for resource: aws_s3_bucket.example
+	File: /main.tf:15-17
+	Guide: https://docs.prismacloud.io/en/enterprise-edition/policy-reference/aws-policies/s3-policies/s3-14-data-encrypted-at-rest
+Check: CKV2_AWS_5: "Ensure that Security Groups are attached to another resource"
+	PASSED for resource: aws_security_group.allow_all
+	File: /main.tf:27-44
+	Guide: https://docs.prismacloud.io/en/enterprise-edition/policy-reference/aws-policies/aws-networking-policies/ensure-that-security-groups-are-attached-to-ec2-instances-or-elastic-network-interfaces-enis
+Check: CKV_AWS_20: "S3 Bucket has an ACL defined which allows public READ access."
+	PASSED for resource: aws_s3_bucket.example
+	File: /main.tf:15-17
+	Guide: https://docs.prismacloud.io/en/enterprise-edition/policy-reference/aws-policies/s3-policies/s3-1-acl-read-permissions-everyone
+Check: CKV_AWS_57: "S3 Bucket has an ACL defined which allows public WRITE access."
+	PASSED for resource: aws_s3_bucket.example
+	File: /main.tf:15-17
+	Guide: https://docs.prismacloud.io/en/enterprise-edition/policy-reference/aws-policies/s3-policies/s3-2-acl-write-permissions-everyone
+Check: CKV_AWS_23: "Ensure every security group and rule has a description"
+	FAILED for resource: aws_security_group.allow_all
+	File: /main.tf:27-44
+	Guide: https://docs.prismacloud.io/en/enterprise-edition/policy-reference/aws-policies/aws-networking-policies/networking-31
+
+		27 | resource "aws_security_group" "allow_all" {
+		28 |   name        = "allow_all"
+		29 |   description = "Allow all inbound traffic"
+		30 | 
+		31 |   ingress {
+		32 |     from_port   = 0
+		33 |     to_port     = 0
+		34 |     protocol    = "-1"
+		35 |     cidr_blocks = ["0.0.0.0/0"]
+		36 |   }
+		37 | 
+		38 |   egress {
+		39 |     from_port   = 0
+		40 |     to_port     = 0
+		41 |     protocol    = "-1"
+		42 |     cidr_blocks = ["0.0.0.0/0"]
+		43 |   }
+		44 | }
+
+Check: CKV_AWS_382: "Ensure no security groups allow egress from 0.0.0.0:0 to port -1"
+	FAILED for resource: aws_security_group.allow_all
+	File: /main.tf:27-44
+	Guide: https://docs.prismacloud.io/en/enterprise-edition/policy-reference/aws-policies/aws-networking-policies/bc-aws-382
+
+		27 | resource "aws_security_group" "allow_all" {
+		28 |   name        = "allow_all"
+		29 |   description = "Allow all inbound traffic"
+		30 | 
+		31 |   ingress {
+		32 |     from_port   = 0
+		33 |     to_port     = 0
+		34 |     protocol    = "-1"
+		35 |     cidr_blocks = ["0.0.0.0/0"]
+		36 |   }
+		37 | 
+		38 |   egress {
+		39 |     from_port   = 0
+		40 |     to_port     = 0
+		41 |     protocol    = "-1"
+		42 |     cidr_blocks = ["0.0.0.0/0"]
+		43 |   }
+		44 | }
+
+Check: CKV_AWS_24: "Ensure no security groups allow ingress from 0.0.0.0:0 to port 22"
+	FAILED for resource: aws_security_group.allow_all
+	File: /main.tf:27-44
+	Guide: https://docs.prismacloud.io/en/enterprise-edition/policy-reference/aws-policies/aws-networking-policies/networking-1-port-security
+
+		27 | resource "aws_security_group" "allow_all" {
+		28 |   name        = "allow_all"
+		29 |   description = "Allow all inbound traffic"
+		30 | 
+		31 |   ingress {
+		32 |     from_port   = 0
+		33 |     to_port     = 0
+		34 |     protocol    = "-1"
+		35 |     cidr_blocks = ["0.0.0.0/0"]
+		36 |   }
+		37 | 
+		38 |   egress {
+		39 |     from_port   = 0
+		40 |     to_port     = 0
+		41 |     protocol    = "-1"
+		42 |     cidr_blocks = ["0.0.0.0/0"]
+		43 |   }
+		44 | }
+
+Check: CKV_AWS_25: "Ensure no security groups allow ingress from 0.0.0.0:0 to port 3389"
+	FAILED for resource: aws_security_group.allow_all
+	File: /main.tf:27-44
+	Guide: https://docs.prismacloud.io/en/enterprise-edition/policy-reference/aws-policies/aws-networking-policies/networking-2
+
+		27 | resource "aws_security_group" "allow_all" {
+		28 |   name        = "allow_all"
+		29 |   description = "Allow all inbound traffic"
+		30 | 
+		31 |   ingress {
+		32 |     from_port   = 0
+		33 |     to_port     = 0
+		34 |     protocol    = "-1"
+		35 |     cidr_blocks = ["0.0.0.0/0"]
+		36 |   }
+		37 | 
+		38 |   egress {
+		39 |     from_port   = 0
+		40 |     to_port     = 0
+		41 |     protocol    = "-1"
+		42 |     cidr_blocks = ["0.0.0.0/0"]
+		43 |   }
+		44 | }
+
+Check: CKV_AWS_260: "Ensure no security groups allow ingress from 0.0.0.0:0 to port 80"
+	FAILED for resource: aws_security_group.allow_all
+	File: /main.tf:27-44
+	Guide: https://docs.prismacloud.io/en/enterprise-edition/policy-reference/aws-policies/aws-networking-policies/ensure-aws-security-groups-do-not-allow-ingress-from-00000-to-port-80
+
+		27 | resource "aws_security_group" "allow_all" {
+		28 |   name        = "allow_all"
+		29 |   description = "Allow all inbound traffic"
+		30 | 
+		31 |   ingress {
+		32 |     from_port   = 0
+		33 |     to_port     = 0
+		34 |     protocol    = "-1"
+		35 |     cidr_blocks = ["0.0.0.0/0"]
+		36 |   }
+		37 | 
+		38 |   egress {
+		39 |     from_port   = 0
+		40 |     to_port     = 0
+		41 |     protocol    = "-1"
+		42 |     cidr_blocks = ["0.0.0.0/0"]
+		43 |   }
+		44 | }
+
+Check: CKV_AWS_277: "Ensure no security groups allow ingress from 0.0.0.0:0 to port -1"
+	FAILED for resource: aws_security_group.allow_all
+	File: /main.tf:27-44
+	Guide: https://docs.prismacloud.io/en/enterprise-edition/policy-reference/aws-policies/aws-networking-policies/ensure-aws-security-group-does-not-allow-all-traffic-on-all-ports
+
+		27 | resource "aws_security_group" "allow_all" {
+		28 |   name        = "allow_all"
+		29 |   description = "Allow all inbound traffic"
+		30 | 
+		31 |   ingress {
+		32 |     from_port   = 0
+		33 |     to_port     = 0
+		34 |     protocol    = "-1"
+		35 |     cidr_blocks = ["0.0.0.0/0"]
+		36 |   }
+		37 | 
+		38 |   egress {
+		39 |     from_port   = 0
+		40 |     to_port     = 0
+		41 |     protocol    = "-1"
+		42 |     cidr_blocks = ["0.0.0.0/0"]
+		43 |   }
+		44 | }
+
+Check: CKV_AWS_126: "Ensure that detailed monitoring is enabled for EC2 instances"
+	FAILED for resource: aws_instance.web
+	File: /main.tf:47-65
+	Guide: https://docs.prismacloud.io/en/enterprise-edition/policy-reference/aws-policies/aws-logging-policies/ensure-that-detailed-monitoring-is-enabled-for-ec2-instances
+
+		47 | resource "aws_instance" "web" {
+		48 |   ami           = "ami-0c55b159cbfafe1f0"
+		49 |   instance_type = "t2.micro"
+		50 | 
+		51 |   vpc_security_group_ids = [aws_security_group.allow_all.id]
+		52 | 
+		53 |   metadata_options {
+		54 |     http_endpoint = "enabled"
+		55 |     http_tokens   = "optional"  # Should be "required" for IMDSv2
+		56 |   }
+		57 | 
+		58 |   root_block_device {
+		59 |     encrypted = false  # Should be true
+		60 |   }
+		61 | 
+		62 |   tags = {
+		63 |     Name = "demo-instance"
+		64 |   }
+		65 | }
+
+Check: CKV_AWS_135: "Ensure that EC2 is EBS optimized"
+	FAILED for resource: aws_instance.web
+	File: /main.tf:47-65
+	Guide: https://docs.prismacloud.io/en/enterprise-edition/policy-reference/aws-policies/aws-general-policies/ensure-that-ec2-is-ebs-optimized
+
+		47 | resource "aws_instance" "web" {
+		48 |   ami           = "ami-0c55b159cbfafe1f0"
+		49 |   instance_type = "t2.micro"
+		50 | 
+		51 |   vpc_security_group_ids = [aws_security_group.allow_all.id]
+		52 | 
+		53 |   metadata_options {
+		54 |     http_endpoint = "enabled"
+		55 |     http_tokens   = "optional"  # Should be "required" for IMDSv2
+		56 |   }
+		57 | 
+		58 |   root_block_device {
+		59 |     encrypted = false  # Should be true
+		60 |   }
+		61 | 
+		62 |   tags = {
+		63 |     Name = "demo-instance"
+		64 |   }
+		65 | }
+
+Check: CKV_AWS_79: "Ensure Instance Metadata Service Version 1 is not enabled"
+	FAILED for resource: aws_instance.web
+	File: /main.tf:47-65
+	Guide: https://docs.prismacloud.io/en/enterprise-edition/policy-reference/aws-policies/aws-general-policies/bc-aws-general-31
+
+		47 | resource "aws_instance" "web" {
+		48 |   ami           = "ami-0c55b159cbfafe1f0"
+		49 |   instance_type = "t2.micro"
+		50 | 
+		51 |   vpc_security_group_ids = [aws_security_group.allow_all.id]
+		52 | 
+		53 |   metadata_options {
+		54 |     http_endpoint = "enabled"
+		55 |     http_tokens   = "optional"  # Should be "required" for IMDSv2
+		56 |   }
+		57 | 
+		58 |   root_block_device {
+		59 |     encrypted = false  # Should be true
+		60 |   }
+		61 | 
+		62 |   tags = {
+		63 |     Name = "demo-instance"
+		64 |   }
+		65 | }
+
+Check: CKV_AWS_8: "Ensure all data stored in the Launch configuration or instance Elastic Blocks Store is securely encrypted"
+	FAILED for resource: aws_instance.web
+	File: /main.tf:47-65
+	Guide: https://docs.prismacloud.io/en/enterprise-edition/policy-reference/aws-policies/aws-general-policies/general-13
+
+		47 | resource "aws_instance" "web" {
+		48 |   ami           = "ami-0c55b159cbfafe1f0"
+		49 |   instance_type = "t2.micro"
+		50 | 
+		51 |   vpc_security_group_ids = [aws_security_group.allow_all.id]
+		52 | 
+		53 |   metadata_options {
+		54 |     http_endpoint = "enabled"
+		55 |     http_tokens   = "optional"  # Should be "required" for IMDSv2
+		56 |   }
+		57 | 
+		58 |   root_block_device {
+		59 |     encrypted = false  # Should be true
+		60 |   }
+		61 | 
+		62 |   tags = {
+		63 |     Name = "demo-instance"
+		64 |   }
+		65 | }
+
+Check: CKV_AWS_62: "Ensure IAM policies that allow full "*-*" administrative privileges are not created"
+	FAILED for resource: aws_iam_role_policy.admin_policy
+	File: /main.tf:68-82
+	Guide: https://docs.prismacloud.io/en/enterprise-edition/policy-reference/aws-policies/aws-iam-policies/bc-aws-iam-45
+
+		68 | resource "aws_iam_role_policy" "admin_policy" {
+		69 |   name = "admin-policy"
+		70 |   role = aws_iam_role.demo_role.id
+		71 | 
+		72 |   policy = jsonencode({
+		73 |     Version = "2012-10-17"
+		74 |     Statement = [
+		75 |       {
+		76 |         Action   = "*"
+		77 |         Effect   = "Allow"
+		78 |         Resource = "*"
+		79 |       }
+		80 |     ]
+		81 |   })
+		82 | }
+
+Check: CKV_AWS_287: "Ensure IAM policies does not allow credentials exposure"
+	FAILED for resource: aws_iam_role_policy.admin_policy
+	File: /main.tf:68-82
+	Guide: https://docs.prismacloud.io/en/enterprise-edition/policy-reference/aws-policies/aws-iam-policies/bc-aws-287
+
+		68 | resource "aws_iam_role_policy" "admin_policy" {
+		69 |   name = "admin-policy"
+		70 |   role = aws_iam_role.demo_role.id
+		71 | 
+		72 |   policy = jsonencode({
+		73 |     Version = "2012-10-17"
+		74 |     Statement = [
+		75 |       {
+		76 |         Action   = "*"
+		77 |         Effect   = "Allow"
+		78 |         Resource = "*"
+		79 |       }
+		80 |     ]
+		81 |   })
+		82 | }
+
+Check: CKV_AWS_288: "Ensure IAM policies does not allow data exfiltration"
+	FAILED for resource: aws_iam_role_policy.admin_policy
+	File: /main.tf:68-82
+	Guide: https://docs.prismacloud.io/en/enterprise-edition/policy-reference/aws-policies/aws-iam-policies/bc-aws-288
+
+		68 | resource "aws_iam_role_policy" "admin_policy" {
+		69 |   name = "admin-policy"
+		70 |   role = aws_iam_role.demo_role.id
+		71 | 
+		72 |   policy = jsonencode({
+		73 |     Version = "2012-10-17"
+		74 |     Statement = [
+		75 |       {
+		76 |         Action   = "*"
+		77 |         Effect   = "Allow"
+		78 |         Resource = "*"
+		79 |       }
+		80 |     ]
+		81 |   })
+		82 | }
+
+Check: CKV_AWS_289: "Ensure IAM policies does not allow permissions management / resource exposure without constraints"
+	FAILED for resource: aws_iam_role_policy.admin_policy
+	File: /main.tf:68-82
+	Guide: https://docs.prismacloud.io/en/enterprise-edition/policy-reference/aws-policies/aws-iam-policies/bc-aws-289
+
+		68 | resource "aws_iam_role_policy" "admin_policy" {
+		69 |   name = "admin-policy"
+		70 |   role = aws_iam_role.demo_role.id
+		71 | 
+		72 |   policy = jsonencode({
+		73 |     Version = "2012-10-17"
+		74 |     Statement = [
+		75 |       {
+		76 |         Action   = "*"
+		77 |         Effect   = "Allow"
+		78 |         Resource = "*"
+		79 |       }
+		80 |     ]
+		81 |   })
+		82 | }
+
+Check: CKV_AWS_286: "Ensure IAM policies does not allow privilege escalation"
+	FAILED for resource: aws_iam_role_policy.admin_policy
+	File: /main.tf:68-82
+	Guide: https://docs.prismacloud.io/en/enterprise-edition/policy-reference/aws-policies/aws-iam-policies/bc-aws-286
+
+		68 | resource "aws_iam_role_policy" "admin_policy" {
+		69 |   name = "admin-policy"
+		70 |   role = aws_iam_role.demo_role.id
+		71 | 
+		72 |   policy = jsonencode({
+		73 |     Version = "2012-10-17"
+		74 |     Statement = [
+		75 |       {
+		76 |         Action   = "*"
+		77 |         Effect   = "Allow"
+		78 |         Resource = "*"
+		79 |       }
+		80 |     ]
+		81 |   })
+		82 | }
+
+Check: CKV_AWS_63: "Ensure no IAM policies documents allow "*" as a statement's actions"
+	FAILED for resource: aws_iam_role_policy.admin_policy
+	File: /main.tf:68-82
+	Guide: https://docs.prismacloud.io/en/enterprise-edition/policy-reference/aws-policies/aws-iam-policies/iam-48
+
+		68 | resource "aws_iam_role_policy" "admin_policy" {
+		69 |   name = "admin-policy"
+		70 |   role = aws_iam_role.demo_role.id
+		71 | 
+		72 |   policy = jsonencode({
+		73 |     Version = "2012-10-17"
+		74 |     Statement = [
+		75 |       {
+		76 |         Action   = "*"
+		77 |         Effect   = "Allow"
+		78 |         Resource = "*"
+		79 |       }
+		80 |     ]
+		81 |   })
+		82 | }
+
+Check: CKV_AWS_355: "Ensure no IAM policies documents allow "*" as a statement's resource for restrictable actions"
+	FAILED for resource: aws_iam_role_policy.admin_policy
+	File: /main.tf:68-82
+	Guide: https://docs.prismacloud.io/en/enterprise-edition/policy-reference/aws-policies/aws-iam-policies/bc-aws-355
+
+		68 | resource "aws_iam_role_policy" "admin_policy" {
+		69 |   name = "admin-policy"
+		70 |   role = aws_iam_role.demo_role.id
+		71 | 
+		72 |   policy = jsonencode({
+		73 |     Version = "2012-10-17"
+		74 |     Statement = [
+		75 |       {
+		76 |         Action   = "*"
+		77 |         Effect   = "Allow"
+		78 |         Resource = "*"
+		79 |       }
+		80 |     ]
+		81 |   })
+		82 | }
+
+Check: CKV_AWS_290: "Ensure IAM policies does not allow write access without constraints"
+	FAILED for resource: aws_iam_role_policy.admin_policy
+	File: /main.tf:68-82
+	Guide: https://docs.prismacloud.io/en/enterprise-edition/policy-reference/aws-policies/aws-iam-policies/bc-aws-290
+
+		68 | resource "aws_iam_role_policy" "admin_policy" {
+		69 |   name = "admin-policy"
+		70 |   role = aws_iam_role.demo_role.id
+		71 | 
+		72 |   policy = jsonencode({
+		73 |     Version = "2012-10-17"
+		74 |     Statement = [
+		75 |       {
+		76 |         Action   = "*"
+		77 |         Effect   = "Allow"
+		78 |         Resource = "*"
+		79 |       }
+		80 |     ]
+		81 |   })
+		82 | }
+
+Check: CKV2_AWS_62: "Ensure S3 buckets should have event notifications enabled"
+	FAILED for resource: aws_s3_bucket.example
+	File: /main.tf:15-17
+	Guide: https://docs.prismacloud.io/en/enterprise-edition/policy-reference/aws-policies/aws-logging-policies/bc-aws-2-62
+
+		15 | resource "aws_s3_bucket" "example" {
+		16 |   bucket = "my-demo-checkov-bucket"
+		17 | }
+
+Check: CKV2_AWS_6: "Ensure that S3 bucket has a Public Access block"
+	FAILED for resource: aws_s3_bucket.example
+	File: /main.tf:15-17
+	Guide: https://docs.prismacloud.io/en/enterprise-edition/policy-reference/aws-policies/aws-networking-policies/s3-bucket-should-have-public-access-blocks-defaults-to-false-if-the-public-access-block-is-not-attached
+
+		15 | resource "aws_s3_bucket" "example" {
+		16 |   bucket = "my-demo-checkov-bucket"
+		17 | }
+
+Check: CKV2_AWS_41: "Ensure an IAM role is attached to EC2 instance"
+	FAILED for resource: aws_instance.web
+	File: /main.tf:47-65
+	Guide: https://docs.prismacloud.io/en/enterprise-edition/policy-reference/aws-policies/aws-iam-policies/ensure-an-iam-role-is-attached-to-ec2-instance
+
+		47 | resource "aws_instance" "web" {
+		48 |   ami           = "ami-0c55b159cbfafe1f0"
+		49 |   instance_type = "t2.micro"
+		50 | 
+		51 |   vpc_security_group_ids = [aws_security_group.allow_all.id]
+		52 | 
+		53 |   metadata_options {
+		54 |     http_endpoint = "enabled"
+		55 |     http_tokens   = "optional"  # Should be "required" for IMDSv2
+		56 |   }
+		57 | 
+		58 |   root_block_device {
+		59 |     encrypted = false  # Should be true
+		60 |   }
+		61 | 
+		62 |   tags = {
+		63 |     Name = "demo-instance"
+		64 |   }
+		65 | }
+
+Check: CKV2_AWS_61: "Ensure that an S3 bucket has a lifecycle configuration"
+	FAILED for resource: aws_s3_bucket.example
+	File: /main.tf:15-17
+	Guide: https://docs.prismacloud.io/en/enterprise-edition/policy-reference/aws-policies/aws-logging-policies/bc-aws-2-61
+
+		15 | resource "aws_s3_bucket" "example" {
+		16 |   bucket = "my-demo-checkov-bucket"
+		17 | }
+
+Check: CKV_AWS_18: "Ensure the S3 bucket has access logging enabled"
+	FAILED for resource: aws_s3_bucket.example
+	File: /main.tf:15-17
+	Guide: https://docs.prismacloud.io/en/enterprise-edition/policy-reference/aws-policies/s3-policies/s3-13-enable-logging
+
+		15 | resource "aws_s3_bucket" "example" {
+		16 |   bucket = "my-demo-checkov-bucket"
+		17 | }
+
+Check: CKV_AWS_144: "Ensure that S3 bucket has cross-region replication enabled"
+	FAILED for resource: aws_s3_bucket.example
+	File: /main.tf:15-17
+	Guide: https://docs.prismacloud.io/en/enterprise-edition/policy-reference/aws-policies/aws-general-policies/ensure-that-s3-bucket-has-cross-region-replication-enabled
+
+		15 | resource "aws_s3_bucket" "example" {
+		16 |   bucket = "my-demo-checkov-bucket"
+		17 | }
+
+Check: CKV_AWS_145: "Ensure that S3 buckets are encrypted with KMS by default"
+	FAILED for resource: aws_s3_bucket.example
+	File: /main.tf:15-17
+	Guide: https://docs.prismacloud.io/en/enterprise-edition/policy-reference/aws-policies/aws-general-policies/ensure-that-s3-buckets-are-encrypted-with-kms-by-default
+
+		15 | resource "aws_s3_bucket" "example" {
+		16 |   bucket = "my-demo-checkov-bucket"
+		17 | }
+
+Check: CKV_AWS_21: "Ensure all data stored in the S3 bucket have versioning enabled"
+	FAILED for resource: aws_s3_bucket.example
+	File: /main.tf:15-17
+	Guide: https://docs.prismacloud.io/en/enterprise-edition/policy-reference/aws-policies/s3-policies/s3-16-enable-versioning
+
+		15 | resource "aws_s3_bucket" "example" {
+		16 |   bucket = "my-demo-checkov-bucket"
+		17 | }
+
+Check: CKV2_AWS_40: "Ensure AWS IAM policy does not allow full IAM privileges"
+	FAILED for resource: aws_iam_role_policy.admin_policy
+	File: /main.tf:68-82
+	Guide: https://docs.prismacloud.io/en/enterprise-edition/policy-reference/aws-policies/aws-iam-policies/bc-aws-2-40
+
+		68 | resource "aws_iam_role_policy" "admin_policy" {
+		69 |   name = "admin-policy"
+		70 |   role = aws_iam_role.demo_role.id
+		71 | 
+		72 |   policy = jsonencode({
+		73 |     Version = "2012-10-17"
+		74 |     Statement = [
+		75 |       {
+		76 |         Action   = "*"
+		77 |         Effect   = "Allow"
+		78 |         Resource = "*"
+		79 |       }
+		80 |     ]
+		81 |   })
+		82 | }
+
+
