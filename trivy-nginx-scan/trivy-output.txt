@@ -1,25 +1,3 @@
-# Trivy Image Scan — nginx:latest
-
-Hands-on vulnerability scanning using [Trivy](https://trivy.dev) by Aqua Security.
-
-## What is Trivy?
-
-Trivy is an open-source security scanner that detects CVEs in container images, filesystems, and repos.
-
-## Installation
-
-```bash
-curl -sfL https://raw.githubusercontent.com/aquasecurity/trivy/main/contrib/install.sh | sh -s -- -b /usr/local/bin
-trivy --version
-```
-
-## Command Used
-
-```bash
-trivy image nginx:latest
-```
-
-## Scan Output
 2026-04-14T18:51:17+05:30	INFO	Adding schema version to the DB repository for backward compatibility	repository="ghcr.io/aquasecurity/trivy-db:2"
 2026-04-14T18:51:17+05:30	INFO	[vuln] Vulnerability scanning is enabled
 2026-04-14T19:04:39+05:30	INFO	Detected OS	family="debian" version="13.4"
