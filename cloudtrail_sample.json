@@ -1,0 +1,68 @@
+{
+  "Records": [
+    {
+      "eventVersion": "1.08",
+      "userIdentity": {
+        "type": "IAMUser",
+        "principalId": "EXAMPLE6E4XEGITWATV6R",
+        "arn": "arn:aws:iam::123456789012:user/Mateo",
+        "accountId": "123456789012",
+        "accessKeyId": "AKIAIOSFODNN7EXAMPLE",
+        "userName": "Mateo"
+      },
+      "eventTime": "2023-07-19T21:17:28Z",
+      "eventSource": "ec2.amazonaws.com",
+      "eventName": "StartInstances",
+      "awsRegion": "us-east-1",
+      "sourceIPAddress": "192.0.2.0",
+      "requestParameters": {
+        "instancesSet": {"items": [{"instanceId": "i-EXAMPLE56126103cb"}]}
+      },
+      "eventID": "e755e09c-42f9-4c5c-9064-EXAMPLE228c7",
+      "readOnly": false,
+      "eventType": "AwsApiCall"
+    },
+    {
+      "eventVersion": "1.08",
+      "userIdentity": {
+        "type": "IAMUser",
+        "principalId": "EXAMPLEUSER123",
+        "arn": "arn:aws:iam::123456789012:user/Nikki",
+        "accountId": "123456789012",
+        "accessKeyId": "AKIAI44QH8DHBEXAMPLE",
+        "userName": "Nikki"
+      },
+      "eventTime": "2023-07-19T22:05:11Z",
+      "eventSource": "s3.amazonaws.com",
+      "eventName": "GetObject",
+      "awsRegion": "us-east-1",
+      "sourceIPAddress": "203.0.113.42",
+      "errorCode": "AccessDenied",
+      "errorMessage": "Access Denied",
+      "eventID": "a123b456-dead-beef-9064-EXAMPLE0001",
+      "readOnly": true,
+      "eventType": "AwsApiCall"
+    },
+    {
+      "eventVersion": "1.08",
+      "userIdentity": {
+        "type": "IAMUser",
+        "principalId": "EXAMPLEADMIN",
+        "arn": "arn:aws:iam::123456789012:user/AdminBot",
+        "accountId": "123456789012",
+        "accessKeyId": "AKIABADACTOR777",
+        "userName": "AdminBot"
+      },
+      "eventTime": "2023-07-19T23:59:01Z",
+      "eventSource": "iam.amazonaws.com",
+      "eventName": "DeleteUser",
+      "awsRegion": "us-east-1",
+      "sourceIPAddress": "198.51.100.99",
+      "errorCode": "NoSuchEntityException",
+      "errorMessage": "The user with name target-user cannot be found.",
+      "eventID": "f999c123-4444-5555-aaaa-EXAMPLEERROR",
+      "readOnly": false,
+      "eventType": "AwsApiCall"
+    }
+  ]
+}
