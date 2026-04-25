@@ -10,3 +10,4 @@ A collection of security-focused tools and projects.
 | [cloudtrail-analyser](./cloudtrail-analyser) | Python | CloudTrail JSON log parser for SOC |
 | [Network-Scanner](./Network-Scanner) | Python | Network scanning tool |
 | [trivy-nginx-scan](./trivy-nginx-scan) | — | Trivy vulnerability scan for Nginx |
+| [vault-dev-lab](./vault-dev-lab) | - | HashiCorp Vault |
