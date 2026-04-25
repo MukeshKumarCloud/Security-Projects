@@ -1,100 +1,165 @@
-# CloudTrail Error Analyzer
+# 🔍 Network Scanner
 
-A Python security script that parses AWS CloudTrail JSON log exports,
-filters for error events (`errorCode` field), and prints a SOC-style
-summary — sorted by error type and user.
+A lightweight Python-based network scanning tool that uses **nmap** under the hood. Built with a Tkinter GUI for desktop use, and easily adaptable to a CLI interface for headless/server environments.
 
-**Skills demonstrated:** Python, JSON parsing, security log analysis,
-cloud infrastructure (AWS CloudTrail), SOC workflows.
+---
+
+## 📋 Table of Contents
+
+- [Overview](#overview)
+- [Features](#features)
+- [Prerequisites](#prerequisites)
+- [Installation](#installation)
+- [Usage](#usage)
+  - [GUI Mode](#gui-mode)
+  - [CLI Mode (No Display / Lab Environments)](#cli-mode-no-display--lab-environments)
+- [Sample Output](#sample-output)
+- [Project Structure](#project-structure)
+- [Known Issues](#known-issues)
+- [Legal Disclaimer](#legal-disclaimer)
+- [License](#license)
+
+---
+
+## Overview
+
+Network Scanner is a Python application that wraps the powerful `nmap` command-line tool inside a clean interface. Enter any IP address or hostname, click **Scan Network**, and get a fast port scan result in seconds.
+
+---
+
+## Features
+
+- Fast port scanning using `nmap -F` (top 100 ports)
+- Clean Tkinter GUI with input field and result display area
+- Graceful error handling — the app never crashes on bad input or unreachable hosts
+- CLI fallback for environments without a display server (servers, labs, WSL)
+
+---
+
+## Prerequisites
+
+- Python 3.x
+- `nmap` installed on the system
+- `tkinter` (bundled with Python on most systems; separate install on Linux)
+- `python-nmap` Python library (optional, for programmatic nmap access)
+
+---
+
+## Installation
+
+```bash
+# 1. Clone the repository
+git clone https://github.com/MukeshKumarCloud/Network-Scanner.git
+cd network-scanner
+
+# 2. Update package lists and install system dependencies
+sudo apt update
+sudo apt-get install nmap -y
+sudo apt-get install python3-tk -y
+
+# 3. Install Python dependencies
+sudo pip install python-nmap
+```
+
+---
 
 ## Usage
 
+### GUI Mode
+
+Requires a display environment (desktop OS, X11 forwarding, etc.).
+
 ```bash
-python3 analyze_cloudtrail.py cloudtrail_sample.json
+python network_scanner.py
 ```
+
+1. Enter an IP address or hostname in the input field (e.g., `45.33.32.156` or `scanme.nmap.org`)
+2. Click the **Scan Network** button
+3. View results in the text area below
+
+### CLI Mode (No Display / Lab Environments)
+
+If your environment has no GUI (servers, cloud labs, WSL without X11), use the CLI version:
+
+```python
+import subprocess
+
+def scan_network(ip_address):
+    print(f"Scanning network: {ip_address}\n")
+    try:
+        output = subprocess.check_output(["nmap", "-F", ip_address])
+        print(output.decode("utf-8"))
+    except subprocess.CalledProcessError:
+        print("An error occurred while scanning the network.")
+    except FileNotFoundError:
+        print("nmap is not installed. Run: sudo apt install nmap")
+
+ip = input("Enter IP Address: ")
+scan_network(ip)
+```
+
+---
 
 ## Sample Output
 
 ```
-Loading: cloudtrail_sample.json
-Timestamp: 2024-xx-xx xx:xx:xx UTC
+Scanning network: 45.33.32.156
 
-Total records loaded: 3
+Starting Nmap 7.98 ( https://nmap.org ) at 2026-04-15 11:42 +0530
+Nmap scan report for scanme.nmap.org (45.33.32.156)
+Host is up (0.39s latency).
+Not shown: 92 closed tcp ports (reset)
+PORT    STATE    SERVICE
+22/tcp  open     ssh
+25/tcp  filtered smtp
+80/tcp  open     http
+135/tcp filtered msrpc
+139/tcp filtered netbios-ssn
+179/tcp filtered bgp
+445/tcp filtered microsoft-ds
+646/tcp filtered ldp
 
-============================================================
-  CLOUDTRAIL ERROR EVENT SUMMARY
-============================================================
-  Total error events : 2
-
-  Error code breakdown:
-    AccessDenied                        1 event(s)
-    NoSuchEntityException               1 event(s)
-
-  Affected users:
-    Nikki                               1 event(s)
-    AdminBot                            1 event(s)
-
-  Detailed events:
-------------------------------------------------------------
-Loading: cloudtrail_sample.json
-/home/mukeshk/cloudtrail-analyzer/analyze_cloudtrail.py:75: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
-  print(f"Timestamp: {datetime.utcnow().strftime('%Y-%m-%d %H:%M:%S')} UTC\n")
-Timestamp: 2026-04-25 08:59:52 UTC
-
-Total records loaded: 3
-============================================================
-  CLOUDTRAIL ERROR EVENT SUMMARY
-============================================================
-  Total error events : 2
-
-  Error code breakdown:
-    AccessDenied                        1 event(s)
-    NoSuchEntityException               1 event(s)
-
-  Affected users:
-    Nikki                               1 event(s)
-    AdminBot                            1 event(s)
-
-  Detailed events:
-------------------------------------------------------------
-  Time       : 2023-07-19T22:05:11Z
-  User       : Nikki
-  Action     : GetObject
-  Service    : s3.amazonaws.com
-  Error Code : AccessDenied
-  Error Msg  : Access Denied
-  Source IP  : 203.0.113.42
-  Region     : us-east-1
-------------------------------------------------------------
-  Time       : 2023-07-19T23:59:01Z
-  User       : AdminBot
-  Action     : DeleteUser
-  Service    : iam.amazonaws.com
-  Error Code : NoSuchEntityException
-  Error Msg  : The user with name target-user cannot be found.
-  Source IP  : 198.51.100.99
-  Region     : us-east-1
-------------------------------------------------------------
+Nmap done: 1 IP address (1 host up) scanned in 8.77 seconds
 ```
 
-## What the errors mean
+---
 
-- **AccessDenied** — a user attempted an action they don't have IAM
-  permission for. High-priority in SOC triage: could be misconfiguration
-  or lateral movement by a threat actor.
+## Project Structure
 
-- **NoSuchEntityException** — a delete/modify call targeted a resource
-  that doesn't exist. Could indicate automated enumeration or a botched
-  script.
+```
+network-scanner/
+│
+├── network_scanner.py   # Main application (GUI version)
+└── README.md            # Project documentation
+```
 
-## Files
+---
 
-| File | Purpose |
-|---|---|
-| `analyze_cloudtrail.py` | Main analyzer script |
-| `cloudtrail_sample.json` | Sample CloudTrail log (from AWS docs) |
+## Known Issues
 
-## Data source
+| Issue | Cause | Fix |
+|---|---|---|
+| `_tkinter.TclError: no display name and no $DISPLAY environment variable` | Running GUI in a headless environment (server/lab) | Use the CLI version instead |
+| `nmap: command not found` | nmap not installed | Run `sudo apt-get install nmap -y` |
+| `An error occurred while scanning the network.` | Invalid IP, unreachable host, or permission error | Verify IP and try with `sudo` |
 
-Sample log structure from the
-[AWS CloudTrail documentation](https://docs.aws.amazon.com/awscloudtrail/latest/userguide/cloudtrail-log-file-examples.html).
+---
+
+## Legal Disclaimer
+
+> ⚠️ **Only scan networks and IP addresses you own or have explicit written permission to scan.**
+>
+> Unauthorized port scanning may be **illegal** under laws such as the Computer Fraud and Abuse Act (USA), the IT Act (India), and similar legislation in other countries.
+>
+> For safe, legal practice, use the officially authorized target maintained by the Nmap project:
+> - **Host:** `scanme.nmap.org`
+> - **IP:** `45.33.32.156`
+>
+> Scanning your own machine (`127.0.0.1`) is always safe.
+
+---
+
+## License
+
+This project is open source and available under the [MIT License](LICENSE).
+
